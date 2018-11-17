@@ -46,7 +46,7 @@ func (ero EncodeResourceObjects) MarshalJSON() ([]byte, error) {
 	for _, resourceObject := range ero {
 		marshaledObject, err := json.Marshal(resourceObject)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 
 		marshaledObjects = append(marshaledObjects, marshaledObject)

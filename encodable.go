@@ -8,7 +8,7 @@ type Encodable interface {
 func ToEncodable(v interface{}) (Encodable, error) {
 	m, ok := v.(Encodable)
 	if !ok {
-		panic("cannot encode")
+		return nil, NewNotEncodableError(v)
 	}
 
 	return m, nil

@@ -34,7 +34,7 @@ func (erl EncodeResourceLinkages) MarshalJSON() ([]byte, error) {
 	for _, linkage := range erl {
 		marshaledObject, err := json.Marshal(linkage)
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
 
 		marshaledObjects = append(marshaledObjects, marshaledObject)

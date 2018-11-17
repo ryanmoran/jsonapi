@@ -17,10 +17,5 @@ func (dd DecodeDocument) UnmarshalJSON(data []byte) error {
 		Data: NewDecodeResourceObject(dd.d),
 	}
 
-	err := json.Unmarshal(data, &document)
-	if err != nil {
-		panic(err)
-	}
-
-	return nil
+	return json.Unmarshal(data, &document)
 }

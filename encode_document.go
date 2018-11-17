@@ -13,7 +13,7 @@ type EncodeDocument struct {
 func NewSingularEncodeDocument(m interface{}) (EncodeDocument, error) {
 	encodable, err := ToEncodable(m)
 	if err != nil {
-		panic(err)
+		return EncodeDocument{}, err
 	}
 
 	return EncodeDocument{
@@ -29,7 +29,7 @@ func NewMultipleEncodeDocument(m interface{}) (EncodeDocument, error) {
 		elem := value.Index(i)
 		encodable, err := ToEncodable(elem.Interface())
 		if err != nil {
-			panic(err)
+			return EncodeDocument{}, err
 		}
 
 		resourceObjects = append(resourceObjects, NewEncodeResourceObject(encodable))

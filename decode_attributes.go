@@ -2,6 +2,7 @@ package jsonapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 )
 
@@ -18,7 +19,7 @@ func (da DecodeAttributes) UnmarshalJSON(data []byte) error {
 
 	err := json.Unmarshal(data, &attributes)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	dValue := reflect.ValueOf(da.d).Elem()
@@ -44,7 +45,7 @@ func (da DecodeAttributes) UnmarshalJSON(data []byte) error {
 
 		value := reflect.ValueOf(v)
 		if value.Kind() != field.Kind() {
-			panic("kinds don't match")
+			return NewDecodeError(da.d, fmt.Sprintf("field %q types %q and %q do not match", k, field.Kind(), value.Kind()))
 		}
 
 		field.Set(value)

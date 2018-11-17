@@ -2,6 +2,7 @@ package jsonapi
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 type DecodeRelationships struct {
@@ -22,7 +23,7 @@ func (dr DecodeRelationships) UnmarshalJSON(data []byte) error {
 
 	err := json.Unmarshal(data, &relationshipsMap)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	var relationships []Relationship
@@ -44,7 +45,7 @@ func (dr DecodeRelationships) UnmarshalJSON(data []byte) error {
 			for _, item := range r {
 				s, ok := item.(map[string]interface{})
 				if !ok {
-					panic("not a map")
+					return NewDecodeError(dr.d, fmt.Sprintf("relationship %s is not an array of objects", name))
 				}
 
 				sType, _ := s["type"].(string)

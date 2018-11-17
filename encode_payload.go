@@ -2,7 +2,6 @@ package jsonapi
 
 import (
 	"encoding/json"
-	"errors"
 	"reflect"
 )
 
@@ -32,10 +31,10 @@ func (ep EncodePayload) MarshalJSON() ([]byte, error) {
 		}
 
 	default:
-		err = errors.New("unknown kind")
+		err = NewEncodeError(ep.m, "payloads must be of type struct or slice")
 	}
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return json.Marshal(document)

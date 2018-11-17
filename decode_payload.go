@@ -15,13 +15,13 @@ func NewDecodePayload(v interface{}) DecodePayload {
 func (dp DecodePayload) UnmarshalJSON(data []byte) error {
 	decodable, ok := dp.v.(Decodable)
 	if !ok {
-		panic("not decodable")
+		return NewNotDecodableError(dp.v)
 	}
 
 	document := NewDecodeDocument(decodable)
 	err := json.Unmarshal(data, &document)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	return nil

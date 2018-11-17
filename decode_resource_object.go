@@ -1,6 +1,9 @@
 package jsonapi
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type DecodeResourceObject struct {
 	d Decodable
@@ -23,11 +26,11 @@ func (dro DecodeResourceObject) UnmarshalJSON(data []byte) error {
 
 	err := json.Unmarshal(data, &object)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	if dro.d.Type() != object.Type {
-		panic("types don't match")
+		return NewDecodeError(dro.d, fmt.Sprintf("types %q and %q do not match", dro.d.Type(), object.Type))
 	}
 
 	dro.d.SetPrimary(object.ID)
