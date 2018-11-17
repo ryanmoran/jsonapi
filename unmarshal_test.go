@@ -48,15 +48,19 @@ var _ = Describe("Unmarshal", func() {
 				"id": "some-id",
 				"relationships": {
 					"single-relation": {
-						"type": "simple-payload",
-						"id": "single-relation-id"
-					},
-					"multi-relation": [
-						{
+						"data": {
 							"type": "simple-payload",
-							"id": "multi-relation-id"
+							"id": "single-relation-id"
 						}
-					]
+					},
+					"multi-relation": {
+						"data": [
+							{
+								"type": "simple-payload",
+								"id": "multi-relation-id"
+							}
+						]
+					}
 				}
 			}
 		}`), &payload)

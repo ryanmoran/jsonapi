@@ -19,14 +19,25 @@ var _ = Describe("DecodeRelationships", func() {
 				})
 			})
 
+			Context("when the JSON is missing a data key", func() {
+				It("returns an error", func() {
+					var payload RelationshipsPayload
+					relationships := jsonapi.NewDecodeRelationships(&payload)
+					err := relationships.UnmarshalJSON([]byte(`{
+						"some-relationship": "no-data"
+					}`))
+					Expect(err).To(MatchError("cannot decode *jsonapi_test.RelationshipsPayload &{  []}: relationship some-relationship is not an object"))
+				})
+			})
+
 			Context("when the JSON has a slice that is not of type []map[string]interface{}", func() {
 				It("returns an error", func() {
 					var payload RelationshipsPayload
 					relationships := jsonapi.NewDecodeRelationships(&payload)
 					err := relationships.UnmarshalJSON([]byte(`{
-						"some-relationship": ["not-a-map"]
+						"some-relationship": { "data": ["not-a-map"] }
 					}`))
-					Expect(err).To(MatchError("cannot decode *jsonapi_test.RelationshipsPayload &{  []}: relationship some-relationship is not an array of objects"))
+					Expect(err).To(MatchError("cannot decode *jsonapi_test.RelationshipsPayload &{  []}: relationship some-relationship data is not an array of objects"))
 				})
 			})
 		})

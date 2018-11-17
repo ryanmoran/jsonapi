@@ -28,35 +28,40 @@ func (dr DecodeRelationships) UnmarshalJSON(data []byte) error {
 
 	var relationships []Relationship
 	for name, resource := range relationshipsMap {
-		switch r := resource.(type) {
+		r, ok := resource.(map[string]interface{})
+		if !ok {
+			return NewDecodeError(dr.d, fmt.Sprintf("relationship %s is not an object", name))
+		}
+
+		switch s := r["data"].(type) {
 		case map[string]interface{}:
-			rType, _ := r["type"].(string)
-			rID, _ := r["id"].(string)
+			sType, _ := s["type"].(string)
+			sID, _ := s["id"].(string)
 
 			relationships = append(relationships, Relationship{
 				Name: name,
 				Type: SingularRelationship,
 				Resource: DecodeResourceLinkage{
-					ResourceType: rType,
-					ID:           rID,
+					ResourceType: sType,
+					ID:           sID,
 				},
 			})
 		case []interface{}:
-			for _, item := range r {
-				s, ok := item.(map[string]interface{})
+			for _, item := range s {
+				t, ok := item.(map[string]interface{})
 				if !ok {
-					return NewDecodeError(dr.d, fmt.Sprintf("relationship %s is not an array of objects", name))
+					return NewDecodeError(dr.d, fmt.Sprintf("relationship %s data is not an array of objects", name))
 				}
 
-				sType, _ := s["type"].(string)
-				sID, _ := s["id"].(string)
+				tType, _ := t["type"].(string)
+				tID, _ := t["id"].(string)
 
 				relationships = append(relationships, Relationship{
 					Name: name,
 					Type: MultiRelationship,
 					Resource: DecodeResourceLinkage{
-						ResourceType: sType,
-						ID:           sID,
+						ResourceType: tType,
+						ID:           tID,
 					},
 				})
 			}
