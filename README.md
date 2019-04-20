@@ -267,7 +267,6 @@ func main() {
 
 ```bash
 go run main.go
-```
 {
   "data": {
     "type": "article",
@@ -291,3 +290,4 @@ go run main.go
     }
   }
 }
+```
