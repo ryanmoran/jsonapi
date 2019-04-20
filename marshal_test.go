@@ -43,6 +43,14 @@ var _ = Describe("Marshal", func() {
 		}`))
 	})
 
+	It("marshals an empty list of simple payloads", func() {
+		var payload []SimplePayload
+		document, err := jsonapi.Marshal(payload)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(document).To(MatchJSON(`{ "data": [] }`))
+	})
+
 	Context("attributes", func() {
 		It("marshals a payload with attributes", func() {
 			document, err := jsonapi.Marshal(AttributesPayload{

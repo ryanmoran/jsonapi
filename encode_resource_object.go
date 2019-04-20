@@ -41,7 +41,7 @@ func (ero EncodeResourceObject) MarshalJSON() ([]byte, error) {
 type EncodeResourceObjects []EncodeResourceObject
 
 func (ero EncodeResourceObjects) MarshalJSON() ([]byte, error) {
-	var marshaledObjects []json.RawMessage
+	marshaledObjects := []json.RawMessage{}
 
 	for _, resourceObject := range ero {
 		marshaledObject, err := json.Marshal(resourceObject)
