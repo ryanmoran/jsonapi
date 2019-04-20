@@ -291,3 +291,89 @@ go run main.go
   }
 }
 ```
+
+### Deserialize a resource object with relationships
+
+```go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+
+	"github.com/ryanmoran/jsonapi"
+)
+
+type Article struct {
+	ID       string
+	Title    string `jsonapi:"title"`
+	Body     string `jsonapi:"body"`
+	AuthorID string
+}
+
+func (a Article) Type() string {
+	return "article"
+}
+
+func (a Article) Primary() string {
+	return a.ID
+}
+
+func (a *Article) SetPrimary(id string) {
+	a.ID = id
+}
+
+func (a *Article) AssignRelationships(relationships []jsonapi.Relationship) {
+	for _, relationship := range relationships {
+		if relationship.Name == "author" {
+			a.AuthorID = relationship.Resource.Primary()
+		}
+	}
+}
+
+func main() {
+	content, err := ioutil.ReadAll(os.Stdin)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	var article Article
+	err = jsonapi.Unmarshal(content, &article)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("%#v\n", article)
+}
+```
+
+```bash
+echo '{
+  "data": {
+    "type": "article",
+    "id": "1",
+    "attributes": {
+      "body": "The shortest article. Ever.",
+      "title": "JSON:API paints my bikeshed!"
+    },
+    "links": {
+      "self": {
+        "href": "/articles/1"
+      }
+    },
+    "relationships": {
+      "author": {
+        "data": {
+          "type": "person",
+          "id": "42"
+        }
+      }
+    }
+  }
+}
+' | go run main.go
+main.Article{ID:"1", Title:"JSON:API paints my bikeshed!", Body:"The shortest article. Ever.", AuthorID:"42"}
+```
