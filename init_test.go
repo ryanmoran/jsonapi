@@ -14,8 +14,6 @@ func TestJsonapi(t *testing.T) {
 	RunSpecs(t, "jsonapi")
 }
 
-type NotAResourcePayload struct{}
-
 type SimplePayload struct {
 	ID string
 }
@@ -67,19 +65,6 @@ func (lp LinksPayload) Links() []jsonapi.Link {
 	}
 }
 
-type UnmarshalablePayload struct {
-	ID       string
-	SomeFunc func() `jsonapi:"some-func"`
-}
-
-func (up UnmarshalablePayload) Type() string {
-	return "unmarshalable-payload"
-}
-
-func (up UnmarshalablePayload) Primary() string {
-	return up.ID
-}
-
 type RelationshipsPayload struct {
 	ID               string
 	SingleRelationID string
@@ -128,20 +113,4 @@ func (rp *RelationshipsPayload) AssignRelationships(relationships []jsonapi.Rela
 			rp.MultiRelationIDs = append(rp.MultiRelationIDs, relationship.Resource.Primary())
 		}
 	}
-}
-
-type NotARelationshipPayload struct {
-	ID string
-}
-
-func (nrp NotARelationshipPayload) Type() string {
-	return "not-a-relationships-payload"
-}
-
-func (nrp NotARelationshipPayload) Primary() string {
-	return nrp.ID
-}
-
-func (nrp NotARelationshipPayload) Relationships() []jsonapi.Relationship {
-	return []jsonapi.Relationship{{Name: "not-a-relation"}}
 }
