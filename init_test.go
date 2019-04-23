@@ -114,3 +114,21 @@ func (rp *RelationshipsPayload) AssignRelationships(relationships []jsonapi.Rela
 		}
 	}
 }
+
+type MetaPayload struct {
+	ID string
+}
+
+func (mp MetaPayload) Type() string {
+	return "meta-payload"
+}
+
+func (mp MetaPayload) Primary() string {
+	return mp.ID
+}
+
+func (mp MetaPayload) Meta() jsonapi.Meta {
+	return jsonapi.Meta{
+		"some-key": "some-value",
+	}
+}

@@ -190,7 +190,7 @@ go run main.go
 }
 ```
 
-### Serialize a resource object with links and relationships
+### Serialize a resource object with links, relationships, and meta
 ```go
 package main
 
@@ -235,6 +235,12 @@ func (a Article) Relationships() []jsonapi.Relationship {
 			},
 		},
 	}
+}
+
+func (a Article) Meta() jsonapi.Meta {
+  return jsonapi.Meta{
+    "views": 100
+  }
 }
 
 type Person struct {
@@ -287,6 +293,9 @@ go run main.go
           "id": "42"
         }
       }
+    },
+    "meta": {
+      "views": 100
     }
   }
 }

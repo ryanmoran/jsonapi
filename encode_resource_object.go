@@ -10,6 +10,7 @@ type EncodeResourceObject struct {
 	Attributes    EncodeAttributes
 	Links         EncodeLinks
 	Relationships EncodeRelationships
+	Meta          EncodeMeta
 }
 
 func NewEncodeResourceObject(encodable Encodable) EncodeResourceObject {
@@ -19,6 +20,7 @@ func NewEncodeResourceObject(encodable Encodable) EncodeResourceObject {
 		Attributes:    NewEncodeAttributes(encodable),
 		Links:         NewEncodeLinks(encodable),
 		Relationships: NewEncodeRelationships(encodable),
+		Meta:          NewEncodeMeta(encodable),
 	}
 }
 
@@ -29,12 +31,14 @@ func (ero EncodeResourceObject) MarshalJSON() ([]byte, error) {
 		Attributes    EncodeAttributes    `json:"attributes,omitempty"`
 		Links         EncodeLinks         `json:"links,omitempty"`
 		Relationships EncodeRelationships `json:"relationships,omitempty"`
+		Meta          EncodeMeta          `json:"meta,omitempty"`
 	}{
 		Type:          ero.Type,
 		ID:            ero.ID,
 		Attributes:    ero.Attributes,
 		Links:         ero.Links,
 		Relationships: ero.Relationships,
+		Meta:          ero.Meta,
 	})
 }
 

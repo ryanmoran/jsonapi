@@ -124,6 +124,24 @@ var _ = Describe("Marshal", func() {
 		})
 	})
 
+	Context("meta", func() {
+		It("marshals a payload with a meta object", func() {
+			document, err := jsonapi.Marshal(MetaPayload{
+				ID: "some-id",
+			})
+			Expect(err).NotTo(HaveOccurred())
+			Expect(document).To(MatchJSON(`{
+				"data": {
+					"type": "meta-payload",
+					"id": "some-id",
+					"meta": {
+						"some-key": "some-value"
+					}
+				}
+			}`))
+		})
+	})
+
 	Context("error objects", func() {
 		It("marshals an error payload", func() {
 			document, err := jsonapi.Marshal(jsonapi.Errors{
