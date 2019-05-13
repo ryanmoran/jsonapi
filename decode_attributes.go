@@ -43,6 +43,13 @@ func (da DecodeAttributes) UnmarshalJSON(data []byte) error {
 			continue
 		}
 
+		if field.Type().AssignableTo(reflect.TypeOf(json.RawMessage{})) {
+			v, err = json.Marshal(v)
+			if err != nil {
+				return err
+			}
+		}
+
 		value := reflect.ValueOf(v)
 		if value.Kind() != field.Kind() {
 			return NewDecodeError(da.d, fmt.Sprintf("field %q types %q and %q do not match", k, field.Kind(), value.Kind()))

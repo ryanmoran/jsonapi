@@ -1,6 +1,7 @@
 package jsonapi_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/ryanmoran/jsonapi"
@@ -45,6 +46,23 @@ func (ap AttributesPayload) Primary() string {
 
 func (ap *AttributesPayload) SetPrimary(id string) {
 	ap.ID = id
+}
+
+type RawMessageAttributesPayload struct {
+	ID       string
+	SomeAttr json.RawMessage `jsonapi:"some-attr"`
+}
+
+func (p RawMessageAttributesPayload) Type() string {
+	return "raw-message-attributes-payload"
+}
+
+func (p RawMessageAttributesPayload) Primary() string {
+	return p.ID
+}
+
+func (p *RawMessageAttributesPayload) SetPrimary(id string) {
+	p.ID = id
 }
 
 type LinksPayload struct {

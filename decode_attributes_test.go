@@ -1,6 +1,8 @@
 package jsonapi_test
 
 import (
+	"encoding/json"
+
 	"github.com/ryanmoran/jsonapi"
 
 	. "github.com/onsi/ginkgo"
@@ -9,6 +11,23 @@ import (
 
 var _ = Describe("DecodeAttributes", func() {
 	Describe("UnmarshalJSON", func() {
+		Context("when an attribute is json.RawMessage", func() {
+			It("decodes the attribute correctly", func() {
+				var payload RawMessageAttributesPayload
+
+				attributes := jsonapi.NewDecodeAttributes(&payload)
+				err := attributes.UnmarshalJSON([]byte(`{
+					"some-attr": {
+						"some-key": "some-value"
+					}
+				}`))
+				Expect(err).NotTo(HaveOccurred())
+				Expect(attributes).To(Equal(jsonapi.NewDecodeAttributes(&RawMessageAttributesPayload{
+					SomeAttr: json.RawMessage(`{"some-key":"some-value"}`),
+				})))
+			})
+		})
+
 		Context("failure cases", func() {
 			Context("when the JSON cannot be unmarshaled", func() {
 				It("returns an error", func() {
