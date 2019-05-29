@@ -48,6 +48,27 @@ func (ap *AttributesPayload) SetPrimary(id string) {
 	ap.ID = id
 }
 
+type ComplexAttributesPayloadAttribute struct {
+	Name string
+}
+
+type ComplexAttributesPayload struct {
+	ID       string
+	SomeAttr ComplexAttributesPayloadAttribute `jsonapi:"some-attr"`
+}
+
+func (p ComplexAttributesPayload) Type() string {
+	return "complex-attributes-payload"
+}
+
+func (p ComplexAttributesPayload) Primary() string {
+	return p.ID
+}
+
+func (p *ComplexAttributesPayload) SetPrimary(id string) {
+	p.ID = id
+}
+
 type RawMessageAttributesPayload struct {
 	ID       string
 	SomeAttr json.RawMessage `jsonapi:"some-attr"`
