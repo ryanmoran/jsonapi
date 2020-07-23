@@ -42,6 +42,25 @@ var _ = Describe("Unmarshal", func() {
 		}))
 	})
 
+	It("unmarshals a payload with optional attributes", func() {
+		var payload OptionalAttributesPayload
+		err := jsonapi.Unmarshal([]byte(`{
+			"data": {
+				"type": "optional-attributes-payload",
+				"id": "some-id",
+				"attributes": {
+					"second-attr": { "second-key": "second-value" }
+				}
+			}
+		}`), &payload)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(payload).To(Equal(OptionalAttributesPayload{
+			ID:         "some-id",
+			SecondAttr: json.RawMessage(`{ "second-key": "second-value" }`),
+		}))
+	})
+
 	It("unmarshals a payload with complex attributes", func() {
 		var payload ComplexAttributesPayload
 		err := jsonapi.Unmarshal([]byte(`{

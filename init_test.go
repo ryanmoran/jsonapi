@@ -48,6 +48,24 @@ func (ap *AttributesPayload) SetPrimary(id string) {
 	ap.ID = id
 }
 
+type OptionalAttributesPayload struct {
+	ID         string
+	FirstAttr  json.RawMessage `jsonapi:"first-attr,omitempty"`
+	SecondAttr json.RawMessage `jsonapi:"second-attr,omitempty"`
+}
+
+func (p OptionalAttributesPayload) Type() string {
+	return "optional-attributes-payload"
+}
+
+func (p OptionalAttributesPayload) Primary() string {
+	return p.ID
+}
+
+func (p *OptionalAttributesPayload) SetPrimary(id string) {
+	p.ID = id
+}
+
 type ComplexAttributesPayloadAttribute struct {
 	Name string
 }
